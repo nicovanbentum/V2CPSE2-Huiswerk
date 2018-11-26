@@ -13,10 +13,13 @@ public:
   sf::Vector2f pos;
   sf::Vector2f size;
   sf::RectangleShape body;
+  sf::Vector2f lastMove;
+  bool lockMovement = false;
 
   square(sf::Vector2f pos, sf::Vector2f size);
 
   void move(sf::Vector2f delta);
+  void undoLastMove();
 
   void jump(sf::Vector2f target);
   void jump(sf::Vector2i target);

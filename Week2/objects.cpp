@@ -8,7 +8,16 @@ square::square(sf::Vector2f pos, sf::Vector2f size) : pos(pos), size(size) {
 }
 
 void square::move(sf::Vector2f delta) {
+	if (lockMovement) return;
+
+	lastMove = delta;
+
   body.setPosition(body.getPosition() + delta);
+}
+
+void square::undoLastMove()
+{
+	move(sf::Vector2f(lastMove.x*-1, lastMove.y*-1)); 
 }
 
 void square::jump(sf::Vector2f target) { body.setPosition(target); }
