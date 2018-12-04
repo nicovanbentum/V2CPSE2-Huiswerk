@@ -1,5 +1,4 @@
 #include "objects.hpp"
-#include "Windows.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <fstream>
@@ -181,7 +180,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-	system("PAUSE");
+	std::cin.get();
 	std::cout << "Terminating application\n";
 	return 0;
 }
