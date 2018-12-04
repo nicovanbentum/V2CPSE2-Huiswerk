@@ -13,8 +13,22 @@ struct drawable
 
 	virtual ~drawable() {}
 
+	std::string texture_location;
 	std::string id;
 	bool isSelected = false;
+};
+
+struct picture : drawable
+{
+	picture(std::string file, sf::Vector2f pos, sf::Vector2f size);
+	
+	void draw(sf::RenderWindow &window) const;
+	void setSize(sf::Vector2f size);
+	sf::Vector2f getSize();
+	sf::Shape& Body();
+
+	sf::RectangleShape body;
+	sf::Texture tex;
 };
 
 struct rectangle : drawable 

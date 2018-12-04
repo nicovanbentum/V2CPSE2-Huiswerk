@@ -1,4 +1,5 @@
 #include "objects.hpp"
+#include "Windows.h"
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include <fstream>
@@ -47,6 +48,12 @@ drawable * vector_to_object(std::vector<std::string> object_data)
 		float length = std::stof(object_data[3]);
 		float thickness = std::stof(object_data[4]);
 		return new line(sf::Vector2f(posx, posy), length, thickness);
+	}
+	else if (name == "PICTURE")
+	{
+		float sizex = std::stof(object_data[3]);
+		float sizey = std::stof(object_data[4]);
+		return new picture("sprite.png", sf::Vector2f(posx, posy), sf::Vector2f(sizex, sizey));
 	}
 }
 
@@ -114,6 +121,23 @@ void vector_of_objects_to_file(std::vector<drawable*> & objects, std::ofstream &
 				+ ";" + "\n";
 			ofs << output;
 		}
+		else if (obj->id == "PICTURE")
+		{
+			int sizex = obj->getSize().x;
+			int sizey = obj->getSize().y;
+			std::string output = obj->id
+				+ ";" + std::to_string(posx)
+				+ ";" + std::to_string(posy)
+				+ ";" + std::to_string(sizex)
+				+ ";" + std::to_string(sizey)
+				+ ";" + obj->texture_location
+				+ ";" + "\n";
+			ofs << output;
+		}
+		else
+		{
+			throw "Object unknown. Check config file formatting.";
+		}
 	}
 }
 
@@ -141,9 +165,9 @@ int main(int argc, char *argv[]) {
 			{
 				if (obj->Body().getGlobalBounds().contains(mouse_pos))
 				{
-					obj->isSelected = true;;
+					obj->isSelected = true;
 					obj->Body().setOutlineColor(sf::Color::Red);
-					obj->Body().setOutlineThickness(5);
+					obj->Body().setOutlineThickness(3);
 				}
 
 				if (obj->isSelected)
@@ -180,7 +204,7 @@ int main(int argc, char *argv[]) {
 			}
 		}
 	}
-	std::cin.get();
+	system("PAUSE");
 	std::cout << "Terminating application\n";
 	return 0;
 }
