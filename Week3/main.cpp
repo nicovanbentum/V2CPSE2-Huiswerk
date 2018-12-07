@@ -4,6 +4,20 @@
 #include <fstream>
 #include <vector>
 
+struct unknown_object_type : public std::exception
+{
+	std::string return_text;
+
+	unknown_object_type(const std::string & text, int line)
+	{
+		return_text = "Exception thrown at line " + std::to_string(line) + " in file " + __FILE__ ", Found unknown object in config file of type: " + text;
+	}
+	const char * what() const override
+	{
+		return return_text.c_str();
+	}
+};
+
 std::vector<std::string> split_string_to_vector(std::string & s, char delimiter)
 {
 	std::string name = "";
@@ -54,6 +68,10 @@ drawable * vector_to_object(std::vector<std::string> object_data)
 		float sizey = std::stof(object_data[4]);
 		return new picture("sprite.png", sf::Vector2f(posx, posy), sf::Vector2f(sizex, sizey));
 	}
+	else
+	{
+		throw unknown_object_type(name, __LINE__);
+	}
 }
 
 std::vector<drawable*> file_to_vector_of_objects(std::ifstream & ifs)
@@ -66,8 +84,18 @@ std::vector<drawable*> file_to_vector_of_objects(std::ifstream & ifs)
 		while (getline(ifs, input))
 		{
 			auto object_vector = split_string_to_vector(input, ';');
-			auto drawable_pointer = vector_to_object(object_vector);
-			return_vector.push_back(drawable_pointer);
+
+			drawable * obj;
+			try
+			{
+				obj = vector_to_object(object_vector);
+				return_vector.push_back(obj);
+			}
+			catch (const std::exception & e)
+			{
+				std::cerr << e.what();
+			}
+			
 			input = "";
 		}
 
@@ -135,7 +163,7 @@ void vector_of_objects_to_file(std::vector<drawable*> & objects, std::ofstream &
 		}
 		else
 		{
-			throw "Object unknown. Check config file formatting.";
+			continue;
 		}
 	}
 }
@@ -197,7 +225,8 @@ int main(int argc, char *argv[]) {
 		while (window.pollEvent(event)) {
 			if (event.type == sf::Event::Closed) {
 				std::ofstream ofs("config.txt");
-				vector_of_objects_to_file(game_objects, ofs);
+				if (ofs.is_open()) vector_of_objects_to_file(game_objects, ofs);
+				ofs.close();
 				window.close();
 			}
 		}
@@ -205,3 +234,4 @@ int main(int argc, char *argv[]) {
 	std::cout << "Terminating application\n";
 	return 0;
 }
+
