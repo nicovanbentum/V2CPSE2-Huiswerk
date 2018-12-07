@@ -4,78 +4,73 @@
 #include <SFML/Graphics.hpp>
 #include <functional>
 
-struct drawable 
-{
-	virtual void draw(sf::RenderWindow &window) const		= 0;
-	virtual void setSize(sf::Vector2f size)					= 0;
-	virtual sf::Vector2f getSize()							= 0;
-	virtual sf::Shape& Body()								= 0;
+struct drawable {
+  virtual void draw(sf::RenderWindow &window) const = 0;
+  virtual void setSize(sf::Vector2f size) = 0;
+  virtual sf::Vector2f getSize() = 0;
+  virtual sf::Shape &Body() = 0;
 
-	virtual ~drawable() {}
+  virtual ~drawable() {}
 
-	std::string texture_location;
-	std::string id;
-	bool isSelected = false;
+  std::string texture_location;
+  std::string id;
+  bool isSelected = false;
 };
 
-struct picture : drawable
-{
-	picture(std::string file, sf::Vector2f pos, sf::Vector2f size);
-	
-	void draw(sf::RenderWindow &window) const;
-	void setSize(sf::Vector2f size);
-	sf::Vector2f getSize();
-	sf::Shape& Body();
+struct picture : drawable {
+  picture(std::string file, sf::Vector2f pos, sf::Vector2f size);
 
-	sf::RectangleShape body;
-	sf::Texture tex;
-};
-
-struct rectangle : drawable 
-{
-  //constructors
-  rectangle(sf::Vector2f pos, sf::Vector2f size);
-  rectangle();
-
-  //member functions
   void draw(sf::RenderWindow &window) const;
   void setSize(sf::Vector2f size);
   sf::Vector2f getSize();
-  sf::Shape& Body();
-  
+  sf::Shape &Body();
+
+  sf::RectangleShape body;
+  sf::Texture tex;
+};
+
+struct rectangle : drawable {
+  // constructors
+  rectangle(sf::Vector2f pos, sf::Vector2f size);
+  rectangle();
+
+  // member functions
+  void draw(sf::RenderWindow &window) const;
+  void setSize(sf::Vector2f size);
+  sf::Vector2f getSize();
+  sf::Shape &Body();
+
   // variables
   sf::RectangleShape body;
 };
 
-struct ball : drawable 
-{
-  //constructors
+struct ball : drawable {
+  // constructors
   ball(sf::Vector2f position, float size);
   ball();
 
-  //member functions
+  // member functions
   void draw(sf::RenderWindow &window) const;
   void setSize(sf::Vector2f size);
   sf::Vector2f getSize();
-  sf::Shape& Body();
+  sf::Shape &Body();
 
-  //variables
+  // variables
   sf::CircleShape body;
 };
 
-struct line : drawable
-{
-	//constructors
-	line(sf::Vector2f start, float length, float thickness);
+struct line : drawable {
+  // constructors
+  line(sf::Vector2f start, float length, float thickness);
 
-	//member functions
-	void draw(sf::RenderWindow &window) const;
-	void setSize(sf::Vector2f size);
-	sf::Vector2f getSize();
-	sf::Shape& Body();
+  // member functions
+  void draw(sf::RenderWindow &window) const;
+  void setSize(sf::Vector2f size);
+  sf::Vector2f getSize();
+  sf::Shape &Body();
 
-	//variables
-	sf::RectangleShape body;
+  // variables
+  sf::RectangleShape body;
 };
 
 #endif

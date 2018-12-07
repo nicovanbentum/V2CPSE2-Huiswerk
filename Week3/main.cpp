@@ -145,8 +145,6 @@ int main(int argc, char *argv[]) {
 
 	sf::RenderWindow window{ sf::VideoMode{1280, 720}, "SFML window" };
 
-	drawable * var = new rectangle(sf::Vector2f(0, 0), sf::Vector2f(0, 0));
-
 	std::ifstream ifs("config.txt");
 	
 	auto game_objects = file_to_vector_of_objects(ifs);
@@ -162,16 +160,17 @@ int main(int argc, char *argv[]) {
 			auto mouse_pos = sf::Vector2f(sf::Mouse::getPosition(window));
 			for (auto & obj : game_objects)
 			{
+				if (obj->isSelected)
+				{
+					obj->Body().setPosition(mouse_pos);
+					break;
+				}
+
 				if (obj->Body().getGlobalBounds().contains(mouse_pos))
 				{
 					obj->isSelected = true;
 					obj->Body().setOutlineColor(sf::Color::Red);
 					obj->Body().setOutlineThickness(3);
-				}
-
-				if (obj->isSelected)
-				{
-					obj->Body().setPosition(mouse_pos);
 				}
 			}
 		}
