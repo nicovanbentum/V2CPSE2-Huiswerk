@@ -1,8 +1,10 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
+#include <set>
 #include <algorithm>
 #include <map>
+#include <unordered_map>
 #include <string>
 
 void file_to_vector(std::string filename, std::vector<char> & filled_vec)
@@ -32,7 +34,7 @@ void alpha_occurences(const std::vector<char> & vec, std::vector<std::pair<char,
 	}
 }
 
-void word_occurences(const std::vector<char> & text, std::map<std::string, int> & words)
+void word_occurences(const std::vector<char> & text, std::unordered_map<std::string, int> & words)
 {
 	std::string word = "";
 	for (auto & c : text)
@@ -93,7 +95,7 @@ int main(int argc, char *argv[]) {
 	std::cout << "counting words.." << std::endl;
 
 	//make a map out of every word and how often it occurs
-	std::map<std::string, int> word_map;
+	std::unordered_map<std::string, int> word_map;
 	word_occurences(bible, word_map);
 
 	//make a new vector of pairs to copy the occurence-maps' content to (in order)
