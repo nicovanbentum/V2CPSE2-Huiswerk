@@ -1,5 +1,5 @@
 build:
-	gcc -std=c++17 main.cpp -o main -lsfml-graphics -lsfml-window -lsfml-system -lstdc++
+	gcc -std=c++17 main.cpp -o main -lstdc++
 run:
 	./main
 clean: 
