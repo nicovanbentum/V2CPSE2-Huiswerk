@@ -51,7 +51,7 @@ gui::gui(sf::Vector2f grid_pos, sf::Vector2f block_size, float spacing) {
 
 	turn_font.loadFromFile("arial.ttf");
 	turn_text.setFont(turn_font);
-	turn_text.setString(turn);
+	//turn_text.setString(turn);
 	turn_text.setCharacterSize(24);
 	turn_text.setFillColor(sf::Color::White);
 	turn_text.setStyle(sf::Text::Bold | sf::Text::Underlined);
@@ -63,11 +63,11 @@ void gui::updateTextures()
 	{
 		for (int j = 0; j < std::size(grid[i]); j++)
 		{
-			if (grid[i][j] == 'X')
+			if (grid[i][j] == turns::X)
 			{
 				blocks[i][j].setTexture(&eks, true);
 			}
-			else if (grid[i][j] == 'O')
+			else if (grid[i][j] == turns::O)
 			{
 				blocks[i][j].setTexture(&O, true);
 			}
@@ -100,34 +100,34 @@ void gui::handle_event(sf::Event event)
 		{
 			for (int j = 0; j < std::size(grid[i]); j++)
 			{
-				if (blocks[i][j].getGlobalBounds().contains(mouse_pos) && grid[i][j] == NULL)
+				if (blocks[i][j].getGlobalBounds().contains(mouse_pos) && grid[i][j] == turns::NONE)
 				{
-					if (grid[i][j] != NULL)
+					if (grid[i][j] != turns::NONE)
 					{
 						return;
 					}
 
-					command *c;
-					if (turn == 'X')
+					std::shared_ptr<command> c;
+					if (turn == turns::X)
 					{
-						c = new Xcommand(j, i);
+						c = std::shared_ptr<Xcommand>(new Xcommand(j,i));
 					}
-					else if (turn == 'O')
+					else if (turn == turns::O)
 					{
-						c = new Ocommand(j, i);
+						c = std::shared_ptr<Ocommand>(new Ocommand(j, i));
 					}
 
 					c->execute(grid, turn);
 					updateTextures();
-					turn_text.setString(turn);
+					//turn_text.setString(turn);
 					list_of_commands.push_back(c);
 
 					break;
 				}
 			}
 		}
-		char c = check_win_condition();
-		if (c != NULL)
+		turns c = check_win_condition();
+		if (c != turns::NONE)
 		{
 			std::cout << c << " wins! " << std::endl;
 			list_of_commands.clear();
@@ -141,7 +141,7 @@ void gui::handle_event(sf::Event event)
 			list_of_commands.clear();
 			replay();
 			updateTextures();
-			turn_text.setString(turn);
+			//turn_text.setString(turn);
 			return;
 		}
 	}
@@ -153,6 +153,6 @@ void gui::handle_event(sf::Event event)
 		}
 		replay();
 		updateTextures();
-		turn_text.setString(turn);
+		//turn_text.setString(turn);
 	}
 }

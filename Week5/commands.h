@@ -1,5 +1,26 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
+#include <iostream>
+
+enum class turns {NONE, X, O};
+
+inline std::ostream & operator<<(std::ostream & out, turns & turn)
+{
+	switch (turn)
+	{
+	case turns::NONE:
+		out << " ";
+		break;
+	case turns::O:
+		out << "O";
+		break;
+	case turns::X:
+		out << "X";
+		break;
+	}
+
+	return out;
+}
 
 struct command
 {
@@ -7,7 +28,7 @@ struct command
 	int y;
 
 	virtual ~command() {}
-	virtual void execute(char(&b)[3][3], char & turn) = 0;
+	virtual void execute(turns(&b)[3][3], turns & turn) = 0;
 };
 
 struct Xcommand : command
@@ -18,10 +39,10 @@ struct Xcommand : command
 		this->y = y;
 	}
 
-	void execute(char(&b)[3][3], char & turn) override
+	void execute(turns(&b)[3][3], turns & turn) override
 	{
 		b[this->y][this->x] = turn;
-		turn = 'O';
+		turn = turns::O;
 	}
 };
 
@@ -33,10 +54,10 @@ struct Ocommand : command
 		this->y = y;
 	}
 
-	void execute(char(&b)[3][3], char & turn) override
+	void execute(turns(&b)[3][3], turns & turn) override
 	{
 		b[this->y][this->x] = turn;
-		turn = 'X';
+		turn = turns::X;
 	}
 };
 
