@@ -1,78 +1,29 @@
-#include "game_states.h"
+#pragma once
+#include "SFML/Graphics.hpp"
+#include "gui_state.h"
 
-void tic_tac_toe::replay()
+void gui::run()
 {
-	for (auto & row : grid)
-	{
-		for (auto & val : row)
-		{
-			val = NULL;
-		}
-	}
+	while (window.isOpen()) {
+		window.clear();
 
-	turn = 'X';
-	for (auto & c : list_of_commands)
-	{
-		c->execute(grid, turn);
-	}
-}
+		draw();
 
-bool tic_tac_toe::check_game_over()
-{
-	bool no_null = true;
-	for (auto & row : grid)
-	{
-		for (auto & b : row)
-		{
-			if (b == NULL)
-			{
-				no_null = false;
+		window.display();
+		sf::Event event;
+		while (window.pollEvent(event)) {
+			if (event.type == sf::Event::Closed) {
+				window.close();
 			}
+			handle_event(event);
 		}
 	}
-
-	return no_null;
-
 }
 
-char tic_tac_toe::check_win_condition()
-{
-	for (int i = 0; i < 3; i++)
-	{
-		if ( (grid[i][0] == grid[i][1]) &&
-			 (grid[i][1] == grid[i][2]) &&
-			 (grid[i][2] != NULL))
-		{
-			return grid[i][2];
-		}
+gui::gui(sf::Vector2f grid_pos, sf::Vector2f block_size, float spacing) {
 
-		if ((grid[0][i] == grid[1][i]) &&
-			(grid[1][i] == grid[2][i]) &&
-			(grid[2][i] != NULL))
-		{
-			return grid[2][i];
-		}
-
-	}
-
-	if ((grid[0][0] == grid[1][1]) &&
-		(grid[1][1] == grid[2][2]) &&
-		(grid[1][1] != NULL))
-	{
-		return grid[1][1];
-	}
-
-	if ((grid[0][2] == grid[1][1]) &&
-		(grid[1][1] == grid[2][0]) &&
-		(grid[1][1] != NULL))
-	{
-		return grid[1][1];
-	}
-
-	return NULL;
-}
-
-gui::gui(sf::RenderWindow & window, sf::Vector2f grid_pos, sf::Vector2f block_size, float spacing) : window(window) {
+	window.setKeyRepeatEnabled(false);
+	window.setFramerateLimit(60);
 
 	int i = 0;
 	sf::Vector2f next_pos = grid_pos;
@@ -151,6 +102,11 @@ void gui::handle_event(sf::Event event)
 			{
 				if (blocks[i][j].getGlobalBounds().contains(mouse_pos) && grid[i][j] == NULL)
 				{
+					if (grid[i][j] != NULL)
+					{
+						return;
+					}
+
 					command *c;
 					if (turn == 'X')
 					{
@@ -199,82 +155,4 @@ void gui::handle_event(sf::Event event)
 		updateTextures();
 		turn_text.setString(turn);
 	}
-}
-
-void command_line::draw()
-{
-	for (auto & row : grid)
-	{
-		std::cout << std::endl;
-		for (auto & i : row)
-		{
-			std::cout << "|" << i << "|";
-		}
-	}
-	std::cout << std::endl;
-
-	char c = check_win_condition();
-	if (c != NULL)
-	{
-		std::cout << c << " wins!" << std::endl;
-		list_of_commands.clear();
-		replay();
-	}
-}
-
-void command_line::run()
-{
-	draw();
-	std::cout << "Turn: " << turn << std::endl;
-
-	//ask x pos
-	std::cout << "x Position: ";
-	std::cin >> x;
-	if (x == -1)
-	{
-		std::cout << "Undid last move" << std::endl;
-		list_of_commands.pop_back();
-		replay();
-		run();
-	}
-
-	//ask y pos
-	std::cout << "Y position: ";
-	std::cin >> y;
-	if (x == -1)
-	{
-		std::cout << "Undid last move" << std::endl;
-		list_of_commands.pop_back();
-		replay();
-		run();
-	}
-
-	command *c;
-	if (turn == 'X')
-	{
-		c = new Xcommand(y-1, x-1);
-	}
-	else if (turn == 'O')
-	{
-		c = new Ocommand(y-1, x-1);
-	}
-
-	c->execute(grid, turn);
-	list_of_commands.push_back(c);
-	
-	auto w_c = check_win_condition();
-	if ( w_c != NULL)
-	{
-		std::cout << w_c << " wins!" << std::endl;
-		list_of_commands.clear();
-		replay();
-	}
-	else if (check_game_over())
-	{
-		std::cout << "It's a tie!" << std::endl;
-		list_of_commands.clear();
-		replay();
-	}
-
-	run();
 }
