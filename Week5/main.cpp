@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
 	
 	command_line cl;
 
-	std::cout << "\nCommand line undo: enter -1 as a position." << std::endl;
+	std::cout << "\nCommand line undo: enter 0 as a position." << std::endl;
 	std::cout << "GUI undo: press the Left arrow on your keyboard.\n" << std::endl;
 
 	std::cout << std::endl;
@@ -19,7 +19,10 @@ int main(int argc, char *argv[]) {
 
 	if (answer == "y")
 	{
-		cl.run();
+		for (;;)
+		{
+			cl.run();
+		}
 	}
 	else
 	{

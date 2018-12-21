@@ -71,3 +71,8 @@ turns tic_tac_toe::check_win_condition()
 
 	return turns::NONE;
 }
+
+char tic_tac_toe::get_turn_text()
+{
+	return static_cast<char>(turn);
+}

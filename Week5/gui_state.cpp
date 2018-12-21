@@ -51,7 +51,7 @@ gui::gui(sf::Vector2f grid_pos, sf::Vector2f block_size, float spacing) {
 
 	turn_font.loadFromFile("arial.ttf");
 	turn_text.setFont(turn_font);
-	//turn_text.setString(turn);
+	turn_text.setString(get_turn_text());
 	turn_text.setCharacterSize(24);
 	turn_text.setFillColor(sf::Color::White);
 	turn_text.setStyle(sf::Text::Bold | sf::Text::Underlined);
@@ -119,7 +119,7 @@ void gui::handle_event(sf::Event event)
 
 					c->execute(grid, turn);
 					updateTextures();
-					//turn_text.setString(turn);
+					turn_text.setString(get_turn_text());
 					list_of_commands.push_back(c);
 
 					break;
@@ -141,7 +141,7 @@ void gui::handle_event(sf::Event event)
 			list_of_commands.clear();
 			replay();
 			updateTextures();
-			//turn_text.setString(turn);
+			turn_text.setString(get_turn_text());
 			return;
 		}
 	}
@@ -153,6 +153,6 @@ void gui::handle_event(sf::Event event)
 		}
 		replay();
 		updateTextures();
-		//turn_text.setString(turn);
+		turn_text.setString(get_turn_text());
 	}
 }

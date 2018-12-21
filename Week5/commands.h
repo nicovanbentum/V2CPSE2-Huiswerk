@@ -2,7 +2,10 @@
 #define COMMANDS_H
 #include <iostream>
 
-enum class turns {NONE, X, O};
+enum class turns : char {
+	NONE = 0, 
+	X = 'X',
+	O = 'O'};
 
 inline std::ostream & operator<<(std::ostream & out, turns & turn)
 {

@@ -20,6 +20,7 @@ struct tic_tac_toe
 	void replay();
 	turns check_win_condition();
 	bool check_game_over();
+	char get_turn_text();
 
 };
 

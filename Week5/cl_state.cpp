@@ -30,23 +30,44 @@ void command_line::run()
 	//ask x pos
 	std::cout << "x Position: ";
 	std::cin >> x;
-	if (x == -1)
+	if (!std::cin.good())
+	{
+		std::cout << "invalid input" << std::endl;
+		std::cin.clear();
+		std::cin.ignore();
+		return;
+	}
+
+	if (x == 0)
 	{
 		std::cout << "Undid last move" << std::endl;
 		list_of_commands.pop_back();
 		replay();
-		run();
+		return;
 	}
 
 	//ask y pos
 	std::cout << "Y position: ";
 	std::cin >> y;
-	if (x == -1)
+	if (!std::cin.good())
+	{
+		std::cout << "invalid input" << std::endl;
+		std::cin.clear();
+		std::cin.ignore();
+		return;
+	}
+	if (x == 0)
 	{
 		std::cout << "Undid last move" << std::endl;
 		list_of_commands.pop_back();
 		replay();
-		run();
+		return;
+	}
+
+	if (x > 3 || y > 3)
+	{
+		std::cout << "Please enter a value below 3" << std::endl;
+		return;
 	}
 
 	std::shared_ptr<command> c;
@@ -76,5 +97,5 @@ void command_line::run()
 		replay();
 	}
 
-	run();
+	return;
 }
